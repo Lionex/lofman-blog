@@ -1,3 +1,4 @@
+#### Files to ignore in a Haskell environment
 dist
 cabal-dev
 *.o
