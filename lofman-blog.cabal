@@ -30,6 +30,7 @@ library
                      , monad-logger
                      , data-default
                      , heroku
+
   default-language:    Haskell2010
 
 executable blog
