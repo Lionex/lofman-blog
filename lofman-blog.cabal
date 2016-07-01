@@ -40,7 +40,7 @@ executable lofman-blog
 
 test-suite new-template-test
   type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
+  hs-source-dirs:      Test
   main-is:             Spec.hs
   build-depends:       base
                      , lofman-blog
