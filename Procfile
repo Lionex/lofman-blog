@@ -1,1 +1,1 @@
-web: bin/lofman-blog
+web: /app/.local/bin/lofman-blog
