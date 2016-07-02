@@ -14,11 +14,9 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 executable lofman-blog
-  hs-source-dirs:      Server
-                     , Client
-                     , .
+  hs-source-dirs:      Src
+
   main-is:             Main.hs
-  -- other-modules:       Web.Views
 
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
