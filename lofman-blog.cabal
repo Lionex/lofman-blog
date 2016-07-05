@@ -27,6 +27,7 @@ executable lofman-blog
                      , monad-logger
                      , mtl
                      , persistent
+                     , persistent-template
                      , persistent-postgresql
                      , Spock
                      , text
