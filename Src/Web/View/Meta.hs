@@ -9,7 +9,7 @@ import qualified Text.Blaze.Html             as H
 import           Text.Blaze.Html5            ((!))
 import qualified Text.Blaze.Html5            as H
 import           Text.Blaze.Html5.Attributes as A
-import           Web.Util
+import           Web.View.Util
 
 
 siteIcon :: H.AttributeValue
