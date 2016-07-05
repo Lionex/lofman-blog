@@ -12,12 +12,12 @@ import           Text.Blaze.Html5.Attributes as A
 import           Web.View.Meta
 import           Web.View.Util
 
-wrapper :: H.Html -> H.Html -> H.Html -> H.Html
+wrapper :: H.Html -> [H.Html] -> H.Html -> H.Html
 wrapper title meta_ body = H.docTypeHtml $ do
     H.head $ do
         H.title title
         H.meta ! A.charset "utf-8"
-        meta_
+        forM_ meta_ Prelude.id
     H.body $ do
         siteNav nav
         H.main ! A.class_ "content" $ do body

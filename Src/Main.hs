@@ -25,10 +25,10 @@ main = do
 app :: SpockCtxT ctx IO ()
 app = do
     get root $
-        let meta_ = twitterCard "Art + Technology" "@gwelof" "Gwen Lofman's web page"
+        let meta_ = [twitterCard "Art + Technology" "@gwelof" "Gwen Lofman's web page"]
         in blaze $ wrapper "Lofman.co" meta_ (H.h1 "Hello World!")
 
     get ("post" <//> var) $ \postId ->
         let title = H.toHtml (postId :: TL.Text)
-            meta_ = twitterCard "Yay" "@gwelof" "Gwen Lofman's web page"
+            meta_ = [twitterCard "Yay" "@gwelof" "Gwen Lofman's web page"]
         in blaze $ wrapper title meta_ (H.h1 title)
