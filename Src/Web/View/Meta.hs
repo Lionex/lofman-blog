@@ -12,9 +12,6 @@ import           Text.Blaze.Html5.Attributes as A
 import           Web.View.Util
 
 
-siteIcon :: H.AttributeValue
-siteIcon = "img/SiteIcon512.png"
-
 twitterCard :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
 twitterCard title user desc = do
     H.meta !: [A.name "twitter:card", A.content "summary"]

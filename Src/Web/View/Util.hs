@@ -18,3 +18,7 @@ link t url = H.a ! A.href url $ t
 
 iconLink :: H.AttributeValue -> H.AttributeValue -> H.Html
 iconLink img = link (H.img ! A.src img)
+
+-- | Simple contstant which contains the URL of the site's logo.
+siteIcon :: H.AttributeValue
+siteIcon = "img/SiteIcon600.png"
