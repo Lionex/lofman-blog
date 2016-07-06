@@ -56,6 +56,10 @@ siteDescription desc
 class View a => ToMeta a where
     toMeta :: a -> H.Html
 
+instance ToMeta a => ToMeta (Maybe a) where
+    toMeta Nothing  = toMeta Home
+    toMeta (Just a) = toMeta a
+
 instance ToMeta Page where
     toMeta Home = do
         siteDescription desc
