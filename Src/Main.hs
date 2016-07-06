@@ -11,6 +11,7 @@ import qualified Text.Blaze.Html               as H
 import           Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import qualified Text.Blaze.Html5              as H
 import           Web.Spock.Safe
+import           Web.View
 import           Web.View.Meta
 import           Web.View.Template
 
@@ -25,10 +26,8 @@ main = do
 app :: SpockCtxT ctx IO ()
 app = do
     get root $
-        let meta_ = [twitterCard "Art + Technology" "@gwelof" "Gwen Lofman's web page"]
-        in blaze $ wrapper "Lofman.co" meta_ (H.h1 "Hello World!")
+        blaze $ wrapper (H.title "Lofman.co" >> toMeta Home) (toBody Home)
 
     get ("post" <//> var) $ \postId ->
         let title = H.toHtml (postId :: TL.Text)
-            meta_ = [twitterCard "Yay" "@gwelof" "Gwen Lofman's web page"]
-        in blaze $ wrapper title meta_ (H.h1 title)
+        in blaze $ wrapper (H.title title >> toMeta Home) (H.h1 title)
