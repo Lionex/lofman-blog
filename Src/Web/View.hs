@@ -4,6 +4,7 @@ module Web.View ( View(..)
                 , Page(..)
                 ) where
 
+import           Model.Types
 import           Text.Blaze.Html5            ((!))
 import           Text.Blaze.Html5            as H
 import           Text.Blaze.Html5.Attributes as A
