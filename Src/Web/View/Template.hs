@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Web.View.Template where
+module Web.View.Template (wrapper) where
 
 import           Control.Monad.Cont
 import           Data.Monoid
