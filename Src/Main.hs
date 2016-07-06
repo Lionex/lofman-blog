@@ -26,8 +26,8 @@ main = do
 app :: SpockCtxT ctx IO ()
 app = do
     get root $
-        blaze $ wrapper (H.title "Lofman.co" >> toMeta Home) (toBody Home)
+        blaze $ wrapper (toTitle Home >> toMeta Home) (toBody Home)
 
     get ("post" <//> var) $ \postId ->
         let title = H.toHtml (postId :: TL.Text)
-        in blaze $ wrapper (H.title title >> toMeta Home) (H.h1 title)
+        in blaze $ wrapper (toTitle Home >> toMeta Home) (H.h1 title)
