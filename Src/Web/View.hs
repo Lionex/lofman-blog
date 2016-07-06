@@ -11,9 +11,6 @@ import           Text.Blaze.Html5.Attributes as A
 class View a where
     toBody :: a -> H.Html
 
-data Page = Home
-    deriving (Eq, Show)
-
 instance View Page where
     toBody Home = do
         H.h1 "Hello World!"

@@ -15,7 +15,11 @@ import           Database.Persist
 import           Database.Persist.Sql
 import           Database.Persist.TH
 
+-- Helper types.
+data Page = Home
+    deriving (Eq, Show)
 
+-- Database types
 share [mkPersist sqlSettings, mkSave "entityDefs"] [persistLowerCase|
 
 BlogPost
