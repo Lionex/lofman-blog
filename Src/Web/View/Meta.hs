@@ -53,14 +53,13 @@ siteDescription desc
     = H.meta !: [A.name "description", A.content desc]
 
 class View a => ToMeta a where
-    -- Converts internal view datatypes to metadata.
     toMeta :: a -> H.Html
 
 instance ToMeta Page where
     toMeta Home = do
         siteDescription desc
         googleVerification
-        twitterCard title "@gwelof" desc
+        twitterCard title "@GwenLofman" desc
         openGraph "http://Lofman.co" title desc
         where title = "Lofman.co"
               desc  = "Gwen Lofman's blog which recounts her art + technology projects."
