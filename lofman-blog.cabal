@@ -21,6 +21,7 @@ executable lofman-blog
   ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , blaze-html
+                     , clay
                      , data-default
                      , heroku
                      , http-types
