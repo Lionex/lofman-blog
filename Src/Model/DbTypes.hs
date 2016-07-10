@@ -8,7 +8,7 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-module Model.Types where
+module Model.DbTypes where
 
 import           Control.Monad.IO.Class (liftIO)
 import           Database.Persist
@@ -23,27 +23,26 @@ data Page = Home
 share [mkPersist sqlSettings, mkSave "entityDefs"] [persistLowerCase|
 
 BlogPost
-    title            String
-    project          ProjectId
-    postDate         String
-    content          String
-    deriving         Show
+    title       String
+    project     ProjectId
+    postDate    String
+    content     String
+    deriving    Show
 
 Author
-    fname            String
-    lname            String
-    profiles         String
-    deriving         Show
+    fname       String
+    lname       String
+    profiles    String
+    deriving    Show
 
 Project
-    name             String
-    description      String
-    deriving         Show
+    name        String
+    description String
+    deriving    Show
 
 BlogAuthor
-    blogPostId       BlogPostId
-    authorId         AuthorId
-    UniqueBlogAuthor blogPostId authorId
-    deriving         Show
+    blogPostId  BlogPostId
+    authorId    AuthorId
+    deriving    Show
 
 |]
