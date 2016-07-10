@@ -6,14 +6,14 @@ module Web.View ( View(..)
 
 import           Control.Monad               (forM_)
 import           Model.Types
-import           Text.Blaze.Html5            ((!))
+import           Text.Blaze.Html5            (Html (..), (!))
 import           Text.Blaze.Html5            as H
 import           Text.Blaze.Html5.Attributes as A
 
 -- | Determines how to render data into HTML.
 class View a where
-    toBody  :: a -> H.Html -- ^ Renders data into content.
-    toTitle :: a -> H.Html -- ^ Renders data into page title.
+    toBody  :: a -> Html -- ^ Renders data into content.
+    toTitle :: a -> Html -- ^ Renders data into page title.
 
 instance View a => View (Maybe a) where
     toBody Nothing   = H.h1 "something went wrong"
