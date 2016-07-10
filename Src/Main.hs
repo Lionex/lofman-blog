@@ -14,6 +14,7 @@ import           Web.Spock.Safe
 import           Web.View
 import           Web.View.Meta
 import           Web.View.Template
+import Database.Persistent
 
 blaze :: (MonadIO m) => H.Html -> ActionCtxT ctx m a
 blaze = lazyBytes . renderHtml
@@ -26,8 +27,8 @@ main = do
 app :: SpockCtxT ctx IO ()
 app = do
     get root $
-        blaze $ wrapper (toTitle Home >> toMeta Home) (toBody Home)
+        blaze $ wrapper (toMeta Home) (toBody Home)
 
     get ("post" <//> var) $ \postId ->
         let title = H.toHtml (postId :: TL.Text)
-        in blaze $ wrapper (toTitle Home >> toMeta Home) (H.h1 title)
+        in blaze $ wrapper (toMeta Home) (H.h1 title)
