@@ -1,15 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 -- The ToMeta typeclass which defines how Metadata for pages is created
-module Web.View.Meta ( ToMeta(..)
+module Web.View.Meta ( ToMeta (..)
                      ) where
 
 import           Control.Monad.Cont
 import           Data.Monoid
 import qualified Data.Text.Lazy              as TL
-import           Model.Types
+import           Model.DbTypes
 import qualified Text.Blaze.Html             as H
-import           Text.Blaze.Html5            ((!))
+import           Text.Blaze.Html5            ( AttributeValue (..)
+                                             , Html (..), (!))
 import qualified Text.Blaze.Html5            as H
 import           Text.Blaze.Html5.Attributes as A
 import           Web.View
@@ -19,7 +20,7 @@ import           Web.View.Util
 
 -- Metadata for Twitter summary card support.
 -- A summary card contains a picture, description, and name for the page.
-twitterCard :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
+twitterCard :: AttributeValue -> AttributeValue -> AttributeValue -> Html
 twitterCard title user desc = do
     H.meta !: [A.name "twitter:card", A.content "summary"]
     H.meta !: [A.name "twitter:title", A.content title]
@@ -30,7 +31,7 @@ twitterCard title user desc = do
 
 -- Metadata for Open Graph API sharing.
 -- Open Graph metadata is used by facebook to post nice share links.
-openGraph :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
+openGraph :: AttributeValue -> AttributeValue -> AttributeValue -> Html
 openGraph url title desc = do
     H.meta !: [A.name "og:url", A.content url]
     H.meta !: [A.name "og:type", A.content "article"]
@@ -40,7 +41,7 @@ openGraph url title desc = do
 
 -- Metadata for Google Site Verification.
 -- Enables control of the website through google's search dashboard.
-googleVerification :: H.Html
+googleVerification :: Html
 googleVerification
     = H.meta
     ! A.name "google-site-verification"
@@ -48,20 +49,26 @@ googleVerification
 
 -- The description of the site that appears on search engines.
 -- Should be a summary of the content.
-siteDescription :: H.AttributeValue -> H.Html
+siteDescription :: AttributeValue -> Html
 siteDescription desc
     = H.meta !: [A.name "description", A.content desc]
 
 -- | Defines how View types become meta-data.
 class View a => ToMeta a where
-    toMeta :: a -> H.Html
+    toMeta :: a -> Html
+    toMeta = toTitle
 
 instance ToMeta a => ToMeta (Maybe a) where
     toMeta Nothing  = toMeta Home
     toMeta (Just a) = toMeta a
 
+instance ToMeta a => ToMeta [a] where
+    toMeta []     = toMeta Home
+    toMeta (x:xs) = toMeta x
+
 instance ToMeta Page where
     toMeta Home = do
+        toTitle Home
         siteDescription desc
         googleVerification
         twitterCard title "@GwenLofman" desc
