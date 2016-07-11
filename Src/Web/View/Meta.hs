@@ -43,9 +43,10 @@ openGraph url title desc = do
 -- Enables control of the website through google's search dashboard.
 googleVerification :: Html
 googleVerification
-    = H.meta
-    ! A.name "google-site-verification"
-    ! A.content "rODBRZX6gBNdpfHZVAB26nyicxYnKE-AuKvIEw6ff-k"
+    = H.meta !:
+    [ A.name "google-site-verification"
+    , A.content "rODBRZX6gBNdpfHZVAB26nyicxYnKE-AuKvIEw6ff-k"
+    ]
 
 -- The description of the site that appears on search engines.
 -- Should be a summary of the content.
