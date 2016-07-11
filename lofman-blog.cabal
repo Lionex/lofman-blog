@@ -17,6 +17,12 @@ executable lofman-blog
   hs-source-dirs:      Src
 
   main-is:             Main.hs
+  other-modules:       Model.DbTypes
+                     , Model.Types
+                     , Web.View
+                     , Web.View.Meta
+                     , Web.View.Template
+                     , Web.View.Util
 
   ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
@@ -37,11 +43,6 @@ executable lofman-blog
                      , wai-extra
                      , warp
   default-language:    Haskell2010
-  other-modules:       Model.Types
-                     , Web.View
-                     , Web.View.Meta
-                     , Web.View.Template
-                     , Web.View.Util
 
 test-suite new-template-test
   type:                exitcode-stdio-1.0
