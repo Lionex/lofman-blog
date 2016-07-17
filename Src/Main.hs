@@ -2,21 +2,24 @@
 
 module Main where
 
-import           Clay                          ( Css(..)
-                                               , compact
-                                               , pretty
-                                               , renderWith
-                                               )
+import           Clay                                 ( Css(..)
+                                                      , compact
+                                                      , pretty
+                                                      , renderWith
+                                                      )
 import           Control.Monad.Cont
 import           Data.Monoid
-import qualified Data.Text.Lazy                as TL
-import qualified Data.Text.Lazy.Encoding       as TL
+import qualified Data.Text.Lazy                       as TL
+import qualified Data.Text.Lazy.Encoding              as TL
 import           Model.DbTypes
 import           Model.Types
+import           Network.Wai
+import           Network.Wai.Middleware.Static
+import           Network.Wai.Middleware.RequestLogger
 import           System.Environment
-import qualified Text.Blaze.Html               as H
-import           Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import qualified Text.Blaze.Html5              as H
+import qualified Text.Blaze.Html                      as H
+import           Text.Blaze.Html.Renderer.Utf8        (renderHtml)
+import qualified Text.Blaze.Html5                     as H
 import           Web.Spock.Safe
 import           Web.View
 import           Web.View.Meta
@@ -32,7 +35,12 @@ clay = H.style . H.toHtml . (renderWith compact [])
 main :: IO ()
 main = do
     port <- liftM read (getEnv "PORT")
-    runSpock port $ spockT id $ app
+    runSpock port $ spockT id $ appMiddleware app
+
+appMiddleware :: SpockT IO ()
+appMiddleware = do
+  middleware logStdoutDev
+  middleware $ staticPolicy (noDots >-> addBase "static")
 
 app :: SpockCtxT ctx IO ()
 app = do

@@ -41,6 +41,7 @@ executable lofman-blog
                      , transformers
                      , wai
                      , wai-extra
+                     , wai-middleware-static
                      , warp
   default-language:    Haskell2010
 
