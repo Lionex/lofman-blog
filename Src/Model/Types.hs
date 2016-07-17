@@ -1,4 +1,6 @@
-module Model.Types where
+module Model.Types
+( Page (..)
+) where
 
 data Page
     = Home
