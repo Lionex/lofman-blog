@@ -18,14 +18,14 @@ import           Text.Blaze.Html5.Attributes as A
 (!:) = foldl (!)
 
 -- | Creates a link with given url and text.
-link :: Html -> AttributeValue -> Html
-link t url = H.a ! A.href url $ t
+link_ :: Html -> AttributeValue -> Html
+link_ t url = H.a ! A.href url $ t
 
 -- | Creates a link in the form of an icon.
 --   Partially applies the link function taking the location of the image
 --   instead of the text value of the link.
 iconLink :: AttributeValue -> AttributeValue -> Html
-iconLink img = link (H.img ! A.src img)
+iconLink img = link_ (H.img ! A.src img)
 
 -- | Simple contstant which contains the URL of the site's logo.
 siteIcon :: AttributeValue

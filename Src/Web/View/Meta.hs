@@ -1,12 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 -- The ToMeta typeclass which defines how Metadata for pages is created
-module Web.View.Meta ( ToMeta (..)
-                     ) where
+module Web.View.Meta
+( ToMeta (..)
+) where
 
 import           Control.Monad.Cont
 import           Data.Monoid
 import qualified Data.Text.Lazy              as TL
+import           Model.Types
 import           Model.DbTypes
 import qualified Text.Blaze.Html             as H
 import           Text.Blaze.Html5            ( AttributeValue (..)
@@ -22,22 +24,22 @@ import           Web.View.Util
 -- A summary card contains a picture, description, and name for the page.
 twitterCard :: AttributeValue -> AttributeValue -> AttributeValue -> Html
 twitterCard title user desc = do
-    H.meta !: [A.name "twitter:card", A.content "summary"]
-    H.meta !: [A.name "twitter:title", A.content title]
+    H.meta !: [A.name "twitter:card",        A.content "summary"]
+    H.meta !: [A.name "twitter:title",       A.content title]
     -- The `@name` of the link's owner, used for twitter analytics.
-    H.meta !: [A.name "twitter:site", A.content user]
+    H.meta !: [A.name "twitter:site",        A.content user]
     H.meta !: [A.name "twitter:description", A.content desc]
-    H.meta !: [A.name "twitter:image", A.content siteIcon]
+    H.meta !: [A.name "twitter:image",       A.content siteIcon]
 
 -- Metadata for Open Graph API sharing.
 -- Open Graph metadata is used by facebook to post nice share links.
 openGraph :: AttributeValue -> AttributeValue -> AttributeValue -> Html
 openGraph url title desc = do
-    H.meta !: [A.name "og:url", A.content url]
-    H.meta !: [A.name "og:type", A.content "article"]
-    H.meta !: [A.name "og:title", A.content title]
+    H.meta !: [A.name "og:url",         A.content url]
+    H.meta !: [A.name "og:type",        A.content "article"]
+    H.meta !: [A.name "og:title",       A.content title]
     H.meta !: [A.name "og:description", A.content desc]
-    H.meta !: [A.name "og:image", A.content siteIcon]
+    H.meta !: [A.name "og:image",       A.content siteIcon]
 
 -- Metadata for Google Site Verification.
 -- Enables control of the website through google's search dashboard.
@@ -64,11 +66,11 @@ instance ToMeta a => ToMeta (Maybe a) where
     toMeta (Just a) = toMeta a
 
 instance ToMeta a => ToMeta [a] where
-    toMeta []     = toMeta Home
-    toMeta (x:xs) = toMeta x
+    toMeta []       = toMeta Home
+    toMeta (x:xs)   = toMeta x
 
 instance ToMeta Page where
-    toMeta Home = do
+    toMeta Home     = do
         toTitle Home
         siteDescription desc
         googleVerification
@@ -76,3 +78,5 @@ instance ToMeta Page where
         openGraph "http://Lofman.co" title desc
         where title = "Lofman.co"
               desc  = "Gwen Lofman's blog which recounts her art + technology projects."
+
+    toMeta Error404 = toTitle Error404 >> toMeta Home
