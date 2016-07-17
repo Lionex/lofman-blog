@@ -38,6 +38,7 @@ executable lofman-blog
                      , persistent-postgresql
                      , Spock
                      , text
+                     , time
                      , transformers
                      , wai
                      , wai-extra

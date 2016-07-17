@@ -11,6 +11,7 @@
 module Model.DbTypes where
 
 import           Control.Monad.IO.Class (liftIO)
+import           Data.Time              (UTCTime)
 import           Database.Persist
 import           Database.Persist.Sql
 import           Database.Persist.TH
@@ -21,7 +22,7 @@ share [mkPersist sqlSettings, mkSave "entityDefs"] [persistLowerCase|
 BlogPost
     title       String
     project     ProjectId
-    postDate    String
+    postDate    UTCTime
     content     String
     deriving    Show
 
@@ -34,6 +35,7 @@ Author
 Project
     name        String
     description String
+    postDate    UTCTime
     deriving    Show
 
 BlogAuthor
