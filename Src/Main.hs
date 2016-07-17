@@ -7,7 +7,7 @@ import           System.Environment
 import           Network.Wai
 import           Network.Wai.Middleware.Static
 import           Network.Wai.Middleware.RequestLogger
-import qualified Web.Handler        as Handler
+import qualified Web.Handler                          as Handler
 import           Web.Spock.Safe
 
 main :: IO ()
