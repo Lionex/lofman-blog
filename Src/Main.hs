@@ -49,7 +49,7 @@ main = do
     port <- liftM read (getEnv "PORT")
     params <- dbConnParams
     let conn = B.concat . concat . map (\(a,b) ->
-               T.encodeUtf8 a : T.encodeUtf8 b : [])
+               T.encodeUtf8 a : "=" : T.encodeUtf8 b : " " : [])
 
     -- Create database connection pool
     pool <- runStderrLoggingT $ createPostgresqlPool (conn params) 5
