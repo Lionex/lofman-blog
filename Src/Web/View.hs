@@ -77,4 +77,4 @@ instance View Author where
         H.h2      ! A.class_ "title name" $ H.toHtml $ fname <> lname
         H.section ! A.class_ "profile"    $ H.toHtml profile
 
-    toTitle (Author f l _) = H.toHtml $ f <> l
+    toTitle (Author f l _) = H.toHtml $ f <> "" <> l
