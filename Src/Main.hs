@@ -67,7 +67,17 @@ app = do
     get ("post" <//> var) $ \postId -> do
         let sheet = clay $ toStyle Home
         postData <- runSql $ ORM.get (postId :: BlogPostId)
-        blaze $ pageTemplate (Home) (Home) >> sheet
+        blaze $ pageTemplate (postData) (postData) >> sheet
+
+    get ("project" <//> var) $ \projectId -> do
+        let sheet = clay $ toStyle Home
+        postData <- runSql $ ORM.get (projectId :: ProjectId)
+        blaze $ pageTemplate (postData) (postData) >> sheet
+
+    get ("profile" <//> var) $ \authorId -> do
+        let sheet = clay $ toStyle Home
+        postData <- runSql $ ORM.get (authorId :: AuthorId)
+        blaze $ pageTemplate (postData) (postData) >> sheet
 
     get "error" $
         let sheet = clay $ toStyle Error404
