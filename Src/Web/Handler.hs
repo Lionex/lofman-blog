@@ -4,6 +4,7 @@
 
 module Web.Handler
 ( home
+, getId404
 , postFromId
 , profileFromId
 , projectFromId
@@ -47,34 +48,31 @@ blaze = lazyBytes . renderHtml
 clay :: Css -> H.Html
 clay = H.style . H.toHtml . (renderWith compact [])
 
+getId404 :: (MonadIO m, PersistEntity val, ToMeta val,
+            HasSpock (ActionCtxT ctx m), PersistEntityBackend val ~ SqlBackend,
+            SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
+            Key val -> ActionCtxT ctx m b
+getId404 itemId = do
+    item <- runSql $ ORM.get itemId
+    blaze $ pageTemplate (item) (item) >> (clay $ toStyle item)
+
 home :: (MonadIO m) => ActionCtxT ctx m ()
-home = let sheet = clay $ toStyle Home
-        in blaze $ pageTemplate (Home) (Home) >> sheet
+home = blaze $ pageTemplate (Home) (Home) >> (clay $ toStyle Home)
 
 postFromId :: (MonadIO m, HasSpock (ActionCtxT ctx m),
               SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
               BlogPostId -> ActionCtxT ctx m b
-postFromId postId = do
-    let sheet = clay $ toStyle Home
-    postData <- runSql $ ORM.get postId
-    blaze $ pageTemplate (postData) (postData) >> sheet
+postFromId = getId404
 
 projectFromId :: (MonadIO m, HasSpock (ActionCtxT ctx m),
                  SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
                  ProjectId -> ActionCtxT ctx m b
-projectFromId projectId = do
-    let sheet = clay $ toStyle Home
-    projectData <- runSql $ ORM.get projectId
-    blaze $ pageTemplate (projectData) (projectData) >> sheet
+projectFromId = getId404
 
 profileFromId :: (MonadIO m, HasSpock (ActionCtxT ctx m),
                  SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
                  AuthorId -> ActionCtxT ctx m b
-profileFromId authorId = do
-    let sheet = clay $ toStyle Home
-    profileData <- runSql $ ORM.get authorId
-    blaze $ pageTemplate (profileData) (profileData) >> sheet
+profileFromId = getId404
 
 error404 :: (MonadIO m) => ActionCtxT ctx m ()
-error404 = let sheet = clay $ toStyle Error404
-           in blaze $ pageTemplate (Error404) (Error404) >> sheet
+error404 = blaze $ pageTemplate (Error404) (Error404) >> (clay $ toStyle Error404)
