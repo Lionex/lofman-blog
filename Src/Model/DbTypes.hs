@@ -29,7 +29,7 @@ BlogPost
 Author
     fname       String
     lname       String
-    profiles    String
+    profile     String
     deriving    Show
 
 Project
