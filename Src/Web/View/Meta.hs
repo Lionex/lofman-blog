@@ -80,3 +80,33 @@ instance ToMeta Page where
               desc  = "Gwen Lofman's blog which recounts her art + technology projects."
 
     toMeta Error404 = toTitle Error404 >> toMeta Home
+
+instance ToMeta BlogPost where
+    toMeta post@(BlogPost title _ _ desc) = do
+        toTitle post
+        googleVerification
+        siteDescription desc'
+        twitterCard title' "@GwenLofman" desc'
+        openGraph "http://Lofman.co" title' desc'
+        where title' = H.toValue title
+              desc'  = H.toValue desc
+
+instance ToMeta Project where
+    toMeta project@(Project title desc _) = do
+        toTitle project
+        googleVerification
+        siteDescription desc'
+        twitterCard title' "@GwenLofman" desc'
+        openGraph "http://Lofman.co" title' desc'
+        where title' = H.toValue title
+              desc'  = H.toValue desc
+
+instance ToMeta Author where
+    toMeta author@(Author f l desc) = do
+        toTitle author
+        googleVerification
+        siteDescription desc'
+        twitterCard name "@GwenLofman" desc'
+        openGraph "http://Lofman.co" name desc'
+        where name  = H.toValue $ mconcat ["Lofman.co: ", f, " ", l]
+              desc' = H.toValue desc
