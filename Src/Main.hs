@@ -38,6 +38,11 @@ blaze = lazyBytes . renderHtml
 clay :: Css -> H.Html
 clay = H.style . H.toHtml . (renderWith compact [])
 
+runSql :: (HasSpock m, SpockConn m ~ SqlBackend) =>
+          SqlPersistT (LoggingT (ResourceT IO)) a -> m a
+runSql action =
+    runQuery $ \conn -> runResourceT $ runStderrLoggingT $ runSqlConn action conn
+
 main :: IO ()
 main = do
     -- Get parameters from Heroku
