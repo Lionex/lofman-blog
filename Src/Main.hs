@@ -58,16 +58,16 @@ main = do
     -- Run app with database conneciton pool
     runSpock port $ spock (defaultSpockCfg Nothing (PCPool pool) ()) $ app
 
--- app :: SpockCtxT ctx IO ()
+app :: SpockM SqlBackend (Maybe a0) () ()
 app = do
     get root $
         let sheet = clay $ toStyle Home
          in blaze $ pageTemplate (Home) (Home) >> sheet
 
-    get ("post" <//> var) $ \postId ->
-        let title = H.toHtml (postId :: TL.Text)
-            sheet = clay $ toStyle Home
-         in blaze $ pageTemplate (Home) (Home) >> sheet
+    get ("post" <//> var) $ \postId -> do
+        let sheet = clay $ toStyle Home
+        postData <- runSql $ ORM.get (postId :: BlogPostId)
+        blaze $ pageTemplate (Home) (Home) >> sheet
 
     get "error" $
         let sheet = clay $ toStyle Error404
