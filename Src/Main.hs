@@ -30,9 +30,10 @@ main = do
     runStderrLoggingT $ runSqlPool (runMigration migrateAll) pool
 
     -- Run app with database conneciton pool
-    runSpock port $ spock (defaultSpockCfg Nothing (PCPool pool) ()) $ app
+    runSpock port $ spock (defaultSpockCfg Nothing (PCPool pool) ())
+                  $ appMiddleware >> app
 
-appMiddleware :: SpockT IO ()
+appMiddleware :: SpockCtxT () (WebStateM SqlBackend (Maybe a) ()) ()
 appMiddleware = do
   middleware logStdoutDev
   middleware $ staticPolicy (noDots >-> addBase "static")
