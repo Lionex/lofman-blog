@@ -16,3 +16,5 @@ instance View Page where
     toBody Home = do
         H.h1 "Hello World!"
         H.p "This site is currently under construction.  Please come back soon!"
+        H.a ! A.href "https://github.com/Lionex/lofman-blog"
+            $ "Follow development here!" 
