@@ -42,11 +42,17 @@ runSql :: (HasSpock m, SpockConn m ~ SqlBackend) =>
 runSql action =
     runQuery $ \conn -> runResourceT $ runStderrLoggingT $ runSqlConn action conn
 
+{-# INLINE runSql #-}
+
 blaze :: (MonadIO m) => H.Html -> ActionCtxT ctx m a
 blaze = lazyBytes . renderHtml
 
+{-# INLINE blaze #-}
+
 clay :: Css -> H.Html
 clay = H.style . H.toHtml . (renderWith compact [])
+
+{-# INLINE clay #-}
 
 getId404 :: (MonadIO m, PersistEntity val, ToMeta val,
             HasSpock (ActionCtxT ctx m), PersistEntityBackend val ~ SqlBackend,
