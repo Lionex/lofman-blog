@@ -2,57 +2,46 @@
 
 module Main where
 
-import           Clay                                 ( Css(..)
-                                                      , compact
-                                                      , pretty
-                                                      , renderWith
-                                                      )
 import           Control.Monad.Cont
-import           Data.Monoid
-import qualified Data.Text.Lazy                       as TL
-import qualified Data.Text.Lazy.Encoding              as TL
+import           Control.Monad.Logger          (LoggingT, runStderrLoggingT)
+import qualified Data.Text.Encoding            as T
+import qualified Data.ByteString               as B
+import           Database.Persist              hiding (get)
+import           Database.Persist.Postgresql   hiding (get)
+import           System.Environment
 import           Model.DbTypes
-import           Model.Types
 import           Network.Wai
 import           Network.Wai.Middleware.Static
 import           Network.Wai.Middleware.RequestLogger
-import           System.Environment
-import qualified Text.Blaze.Html                      as H
-import           Text.Blaze.Html.Renderer.Utf8        (renderHtml)
-import qualified Text.Blaze.Html5                     as H
+import qualified Web.Handler                          as Handler
 import           Web.Spock.Safe
-import           Web.View
-import           Web.View.Meta
-import           Web.View.Template
-import           Web.View.Style
-
-blaze :: (MonadIO m) => H.Html -> ActionCtxT ctx m a
-blaze = lazyBytes . renderHtml
-
-clay :: Css -> H.Html
-clay = H.style . H.toHtml . (renderWith compact [])
+import           Web.Heroku
 
 main :: IO ()
 main = do
+    -- Get parameters from Heroku
     port <- liftM read (getEnv "PORT")
-    runSpock port $ spockT id $ appMiddleware app
+    params <- dbConnParams
+    let conn = B.concat . concat . map (\(a,b) ->
+               T.encodeUtf8 a : "=" : T.encodeUtf8 b : " " : [])
 
-appMiddleware :: SpockT IO ()
+    -- Create database connection pool
+    pool <- runStderrLoggingT $ createPostgresqlPool (conn params) 5
+    runStderrLoggingT $ runSqlPool (runMigration migrateAll) pool
+
+    -- Run app with database conneciton pool
+    runSpock port $ spock (defaultSpockCfg Nothing (PCPool pool) ())
+                  $ appMiddleware >> app
+
+appMiddleware :: SpockCtxT () (WebStateM SqlBackend (Maybe a) ()) ()
 appMiddleware = do
   middleware logStdoutDev
   middleware $ staticPolicy (noDots >-> addBase "static")
 
-app :: SpockCtxT ctx IO ()
+app :: SpockM SqlBackend (Maybe a0) () ()
 app = do
-    get root $
-        let sheet = clay $ toStyle Home
-         in blaze $ pageTemplate (Home) (Home) >> sheet
-
-    get ("post" <//> var) $ \postId ->
-        let title = H.toHtml (postId :: TL.Text)
-            sheet = clay $ toStyle Home
-         in blaze $ pageTemplate (Home) (Home) >> sheet
-
-    get "error" $
-        let sheet = clay $ toStyle Error404
-         in blaze $ pageTemplate (Error404) (Error404) >> sheet
+    get root                 $ Handler.home
+    get ("post" <//> var)    $ Handler.postFromId
+    get ("project" <//> var) $ Handler.projectFromId
+    get ("profile" <//> var) $ Handler.profileFromId
+    get "error"              $ Handler.error404

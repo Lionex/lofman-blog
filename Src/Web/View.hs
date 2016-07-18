@@ -7,9 +7,10 @@ module Web.View
 import           Control.Monad               (forM_)
 import           Clay                        (Css (..), (#), (?))
 import qualified Clay                        as C
+import           Data.Monoid
 import           Model.Types
 import           Model.DbTypes
-import           Text.Blaze.Html5            (Html (..), (!))
+import           Text.Blaze.Html5            (Html (..), (!), toHtml)
 import qualified Text.Blaze.Html5            as H
 import           Text.Blaze.Html5.Attributes as A
 import qualified Web.View.Style              as S
@@ -53,3 +54,27 @@ instance View Page where
 
     toStyle Home     = S.baseStyle >> S.mastHead
     toStyle Error404 = S.baseStyle >> S.noMastHead
+
+instance View BlogPost where
+    toBody (BlogPost t _ _ content) = H.article ! A.class_ "blog-post" $ do
+        H.h2      ! A.class_ "title blog-post" $ H.toHtml t
+        H.section ! A.class_ "attribution"     $ "Author, date"
+        H.section ! A.class_ "content"         $ H.toHtml content
+        H.section ! A.class_ "project"         $ "Project"
+
+    toTitle (BlogPost t _ _ _)      = H.toHtml $ "Lofman.co: " <> t
+
+instance View Project where
+    toBody (Project t d _)  = H.article ! A.class_ "project" $ do
+        H.h2      ! A.class_ "title project" $ H.toHtml t
+        H.section ! A.class_ "description"   $ H.toHtml d
+        H.section ! A.class_ "project posts" $ "list of posts"
+
+    toTitle (Project t _ _) = H.toHtml $ "Lofman.co: " <> t
+
+instance View Author where
+    toBody (Author fname lname profile) = H.div $ do
+        H.h2      ! A.class_ "title name" $ H.toHtml $ fname <> lname
+        H.section ! A.class_ "profile"    $ H.toHtml profile
+
+    toTitle (Author f l _) = H.toHtml $ f <> " " <> l

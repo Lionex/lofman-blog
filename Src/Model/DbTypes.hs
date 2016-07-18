@@ -11,29 +11,31 @@
 module Model.DbTypes where
 
 import           Control.Monad.IO.Class (liftIO)
+import           Data.Time              (UTCTime)
 import           Database.Persist
-import           Database.Persist.Sql
+import           Database.Persist.Postgresql
 import           Database.Persist.TH
 
 -- Database types
-share [mkPersist sqlSettings, mkSave "entityDefs"] [persistLowerCase|
+share [mkPersist sqlSettings, mkSave "entityDefs", mkMigrate "migrateAll"] [persistLowerCase|
 
 BlogPost
     title       String
     project     ProjectId
-    postDate    String
+    postDate    UTCTime
     content     String
     deriving    Show
 
 Author
     fname       String
     lname       String
-    profiles    String
+    profile     String
     deriving    Show
 
 Project
     name        String
     description String
+    postDate    UTCTime
     deriving    Show
 
 BlogAuthor

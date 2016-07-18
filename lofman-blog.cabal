@@ -27,6 +27,7 @@ executable lofman-blog
   ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , blaze-html
+                     , bytestring
                      , clay
                      , data-default
                      , heroku
@@ -36,8 +37,10 @@ executable lofman-blog
                      , persistent
                      , persistent-template
                      , persistent-postgresql
+                     , resourcet
                      , Spock
                      , text
+                     , time
                      , transformers
                      , wai
                      , wai-extra
