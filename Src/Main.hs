@@ -1,27 +1,30 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeFamilies      #-}
 
 module Main where
 
-import           Clay                                ( Css(..)
-                                                     , compact
-                                                     , pretty
-                                                     , renderWith
-                                                     )
+import           Clay                          ( Css(..)
+                                               , compact
+                                               , pretty
+                                               , renderWith
+                                               )
 import           Control.Monad.Cont
-import           Control.Monad.Logger                (runStderrLoggingT)
-import qualified Data.ByteString                     as B
+import           Control.Monad.Logger          (LoggingT, runStderrLoggingT)
+import           Control.Monad.Trans.Resource
+import qualified Data.ByteString               as B
 import           Data.Monoid
-import qualified Data.Text.Lazy                      as TL
-import qualified Data.Text.Lazy.Encoding             as TL
-import qualified Data.Text.Encoding                  as T
-import           Database.Persist            hiding (get)
-import           Database.Persist.Postgresql hiding (get)
+import qualified Data.Text.Lazy                as TL
+import qualified Data.Text.Lazy.Encoding       as TL
+import qualified Data.Text.Encoding            as T
+import           Database.Persist              hiding (get)
+import           Database.Persist.Postgresql   hiding (get)
+import qualified Database.Persist              as ORM
 import           Model.DbTypes
 import           Model.Types
 import           System.Environment
-import qualified Text.Blaze.Html                     as H
-import           Text.Blaze.Html.Renderer.Utf8       (renderHtml)
-import qualified Text.Blaze.Html5                    as H
+import qualified Text.Blaze.Html               as H
+import           Text.Blaze.Html.Renderer.Utf8 (renderHtml)
+import qualified Text.Blaze.Html5              as H
 import           Web.Spock.Safe
 import           Web.View
 import           Web.View.Meta
