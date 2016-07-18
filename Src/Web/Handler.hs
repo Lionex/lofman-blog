@@ -28,7 +28,7 @@ import qualified Database.Persist              as ORM
 import           Model.DbTypes
 import           Model.Types
 import qualified Text.Blaze.Html               as H
-import           Text.Blaze.Html.Renderer.Utf8 (renderHtml)
+import           Text.Blaze.Html.Renderer.Utf8 (Html (..), renderHtml, toHtml)
 import qualified Text.Blaze.Html5              as H
 import           Web.Spock.Safe
 import           Web.View
@@ -44,13 +44,13 @@ runSql action =
 
 {-# INLINE runSql #-}
 
-blaze :: (MonadIO m) => H.Html -> ActionCtxT ctx m a
+blaze :: (MonadIO m) => Html -> ActionCtxT ctx m a
 blaze = lazyBytes . renderHtml
 
 {-# INLINE blaze #-}
 
-clay :: Css -> H.Html
-clay = H.style . H.toHtml . (renderWith compact [])
+clay :: Css -> Html
+clay = H.style . toHtml . (renderWith compact [])
 
 {-# INLINE clay #-}
 
