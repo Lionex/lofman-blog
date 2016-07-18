@@ -37,6 +37,7 @@ executable lofman-blog
                      , persistent
                      , persistent-template
                      , persistent-postgresql
+                     , resourcet
                      , Spock
                      , text
                      , time
