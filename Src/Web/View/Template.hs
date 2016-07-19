@@ -13,6 +13,7 @@ import           Web.View
 import           Web.View.Meta
 import           Web.View.Util
 
+-- Defines the page markup shared in common btween all sections of the website.
 pageTemplate :: (ToMeta a, View b) => a -> b -> Html
 pageTemplate meta body = H.docTypeHtml $ do
     H.head $ do
@@ -27,6 +28,7 @@ pageTemplate meta body = H.docTypeHtml $ do
                 , link_ "Posts" "/posts"
                 ]
 
+-- Defines the navigation bar for the site
 siteNav :: [Html] -> Html
 siteNav nav = H.nav ! A.class_ "crossfade site-nav" $ do
     H.ul ! A.class_ "nav" $ do
@@ -34,13 +36,17 @@ siteNav nav = H.nav ! A.class_ "crossfade site-nav" $ do
         let wrap = H.li ! A.class_ "nav-button"
          in forM_ nav wrap
 
+-- Defines the footer of the website.
 footer :: [Html] -> [Html] -> Html
 footer social nav = H.footer ! A.class_ "site" $ do
+    -- Social links, and a profile with information about the site owner.
     H.aside ! A.class_ "profile" $ do
         H.h2 "Gwen Lofman"
         let wrap = H.li ! A.class_ "nav-button social-nav-button"
          in H.ul ! A.class_ "social" $ forM_ social wrap
 
+    -- Navigation bar in the footer to provide alternate method of navigation
+    -- through site content.
     H.nav ! A.class_ "footer-nav" $ do
         let wrap = H.li ! A.class_ "nav-button footer-nav-button"
          in H.ul ! A.class_ "nav" $ forM_ nav wrap

@@ -33,11 +33,15 @@ main = do
     runSpock port $ spock (defaultSpockCfg Nothing (PCPool pool) ())
                   $ appMiddleware >> app
 
+-- Used to add logging capabilities in addition to static files.
+-- Seperates defition of middleware from the actual application.
 appMiddleware :: SpockCtxT () (WebStateM SqlBackend (Maybe a) ()) ()
 appMiddleware = do
   middleware logStdoutDev
   middleware $ staticPolicy (noDots >-> addBase "static")
 
+-- Defines the connection between routes and handlers, and thus sets the
+-- API of the application.
 app :: SpockM SqlBackend (Maybe a0) () ()
 app = do
     get root                 $ Handler.home

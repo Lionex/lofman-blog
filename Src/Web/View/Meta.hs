@@ -56,7 +56,9 @@ siteDescription :: AttributeValue -> Html
 siteDescription desc
     = H.meta !: [A.name "description", A.content desc]
 
--- | Defines how View types become meta-data.
+-- | Defines how View types become meta-data
+--   Most importantly, defines the description and image associated 
+--   with each type.
 class View a => ToMeta a where
     toMeta :: a -> Html
     toMeta = toTitle

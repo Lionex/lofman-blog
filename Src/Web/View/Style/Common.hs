@@ -29,16 +29,22 @@ headerFont = do
     textRendering optimizeLegibility
     color         "#222"
 
+-----------------------------------------------------------------------
 -- Helper style rules
 -- Designed for compositional use and utility
+
+-- Creates a style rule to give zero padding to an element.
 zeroPad :: Css
 zeroPad = padding (em 0) (em 0) (em 0) (em 0)
 
+-- Creates a style rule to give zero margins to an element.
 zeroMargin :: Css
 zeroMargin = margin (em 0) (em 0) (em 0) (em 0)
 
+-- Creates a rule with the same margin on all sides.
 margin_ :: Size a -> Css
 margin_ n = margin n n n n
 
+-- Creates a rule with the same padding on all sides.
 padding_ :: Size a -> Css
 padding_ n = padding n n n n

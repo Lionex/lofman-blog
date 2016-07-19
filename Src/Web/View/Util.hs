@@ -13,7 +13,7 @@ import           Text.Blaze.Html5            ( Attribute (..)
 import qualified Text.Blaze.Html5            as H
 import           Text.Blaze.Html5.Attributes as A
 
--- | Adds a list of attributes to an element.
+-- | Adds a list of attributes to a self-closing element.
 (!:) :: Html -> [Attribute] -> Html
 (!:) = foldl (!)
 

@@ -37,10 +37,15 @@ import           Web.View.Template
 import           Web.View.Style
 import           Web.Heroku
 
+-- | Runs queries through persistent to access the databse.
+--   Nest database action inside runQuery to gain access to Spock's Database
+--   connection pooling.
 runSql :: (HasSpock m, SpockConn m ~ SqlBackend) =>
           SqlPersistT (LoggingT (ResourceT IO)) a -> m a
-runSql action =
-    runQuery $ \conn -> runResourceT $ runStderrLoggingT $ runSqlConn action conn
+runSql action = runQuery
+    -- runQuery needs a function which takes a connection and returns the
+    -- result in the proper monad.
+    (\conn -> runResourceT $ runStderrLoggingT $ runSqlConn action conn)
 
 {-# INLINE runSql #-}
 
@@ -54,17 +59,25 @@ clay = H.style . toHtml . (renderWith compact [])
 
 {-# INLINE clay #-}
 
+-- | Searches the database with the id retrieved from the type-safe route.
+--   If the id is not found, will automatically use the maybe instance of
+--   View and toMeta to serve the error page.
 getId404 :: (MonadIO m, PersistEntity val, ToMeta val,
             HasSpock (ActionCtxT ctx m), PersistEntityBackend val ~ SqlBackend,
             SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
+            -- To use getId404, the type of the key must be specified
+            -- for the compiler to select the right instance.
             Key val -> ActionCtxT ctx m b
 getId404 itemId = do
     item <- runSql $ ORM.get itemId
     blaze $ pageTemplate (item) (item) >> (clay $ toStyle item)
 
+
 home :: (MonadIO m) => ActionCtxT ctx m ()
 home = blaze $ pageTemplate (Home) (Home) >> (clay $ toStyle Home)
 
+-- | Returns the post which maches the ID from the route.
+-- 
 postFromId :: (MonadIO m, HasSpock (ActionCtxT ctx m),
               SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
               BlogPostId -> ActionCtxT ctx m b
