@@ -28,7 +28,8 @@ import qualified Database.Persist              as ORM
 import           Model.DbTypes
 import           Model.Types
 import qualified Text.Blaze.Html               as H
-import           Text.Blaze.Html.Renderer.Utf8 (Html (..), renderHtml, toHtml)
+import           Text.Blaze.Html               (Html (..), toHtml)
+import           Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import qualified Text.Blaze.Html5              as H
 import           Web.Spock.Safe
 import           Web.View
@@ -77,7 +78,7 @@ home :: (MonadIO m) => ActionCtxT ctx m ()
 home = blaze $ pageTemplate (Home) (Home) >> (clay $ toStyle Home)
 
 -- | Returns the post which maches the ID from the route.
--- 
+--
 postFromId :: (MonadIO m, HasSpock (ActionCtxT ctx m),
               SpockConn (ActionCtxT ctx m) ~ SqlBackend) =>
               BlogPostId -> ActionCtxT ctx m b
