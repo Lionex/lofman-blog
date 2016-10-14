@@ -3,11 +3,11 @@
 module Main where
 
 import           Control.Monad.Cont
-import           Control.Monad.Logger          (LoggingT, runStderrLoggingT)
-import qualified Data.Text.Encoding            as T
-import qualified Data.ByteString               as B
-import           Database.Persist              hiding (get)
-import           Database.Persist.Postgresql   hiding (get)
+import           Control.Monad.Logger                 (LoggingT, runStderrLoggingT)
+import qualified Data.Text.Encoding                   as T
+import qualified Data.ByteString                      as B
+import           Database.Persist                     hiding (get)
+import           Database.Persist.Postgresql          hiding (get)
 import           System.Environment
 import           Model.DbTypes
 import           Network.Wai
