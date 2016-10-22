@@ -3,10 +3,10 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE TypeOperators #-}
 
-module API where
+module API
 ( API
 , api
-)
+) where
 
 import           Data.Aeson
 import           Data.Proxy

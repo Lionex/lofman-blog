@@ -8,14 +8,14 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-module Model.DbTypes where
+module Model.DbTypes
 -- * content types
 ( BlogPost
 , Author
 , Project
 -- * utility types
 , BlogAuthor
-)
+) where
 
 import           Control.Monad.IO.Class (liftIO)
 import           Data.Time              (UTCTime, DiffTime)
