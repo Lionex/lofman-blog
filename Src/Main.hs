@@ -1,3 +1,9 @@
-{-# LANGUAGE OverloadedStrings #-}
+module Main
+( main
+) where
 
-module Main where
+import           API
+import           App
+
+main :: IO ()
+main = app
