@@ -11,7 +11,7 @@
 module Model.DbTypes where
 
 import           Control.Monad.IO.Class (liftIO)
-import           Data.Time              (UTCTime)
+import           Data.Time              (UTCTime, DiffTime)
 import           Database.Persist
 import           Database.Persist.Postgresql
 import           Database.Persist.TH
@@ -21,9 +21,12 @@ share [mkPersist sqlSettings, mkSave "entityDefs", mkMigrate "migrateAll"] [pers
 
 BlogPost
     title       String
-    project     ProjectId
     postDate    UTCTime
+    category    String
     content     String
+    project     ProjectId
+    pageViews   Int
+    readingTime DiffTime
     deriving    Show
 
 Author
