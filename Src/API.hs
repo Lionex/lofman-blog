@@ -35,10 +35,11 @@ type AuthorAPI = "author"
     :<|> Capture "authorId" AuthorId :> Get '[JSON] Author
     :<|> ReqBody '[JSON] Author :> Post '[JSON] Author
 
-type API' = "api"
-    :> BlogAPI
+type API' = "api" :>
+    (    BlogAPI
     :<|> ProjectAPI
     :<|> AuthorAPI
+    )
 
 type API = API' :<|> Raw
 
