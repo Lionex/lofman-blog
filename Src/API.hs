@@ -4,7 +4,13 @@
 {-# LANGUAGE TypeOperators #-}
 
 module API
+-- * API types
 ( API
+, API'
+, AuthorAPI
+, BlogAPI
+, ProjectAPI
+-- * API function for server
 , api
 ) where
 
