@@ -32,6 +32,7 @@ executable lofman-blog
                      , persistent-postgresql
                      , servant
                      , servant-server
+                     , text
                      , time
                      , transformers
                      , wai
