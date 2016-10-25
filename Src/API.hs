@@ -12,7 +12,6 @@ module API
 , ProjectAPI
 , CrudAPI
 -- * Utility Types
-, Handler
 , MaybeOneOrMany
 -- * API function for server
 , api
@@ -42,8 +41,6 @@ type API' = "api" :>
     )
 
 type API = API' :<|> Raw
-
-type Handler = EitherT (ServantErr) (IO)
 
 type MaybeOneOrMany a = Either (Maybe a) [a]
 
