@@ -35,6 +35,7 @@ executable lofman-blog
                      , persistent-template
                      , persistent-postgresql
                      , servant
+                     , servant-elm
                      , servant-server
                      , text
                      , time
