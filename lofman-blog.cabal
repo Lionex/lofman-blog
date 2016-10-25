@@ -27,6 +27,10 @@ executable lofman-blog
   ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , aeson
+                     , bytestring
+                     , either
+                     , monad-logger
+                     , mtl
                      , persistent
                      , persistent-template
                      , persistent-postgresql
