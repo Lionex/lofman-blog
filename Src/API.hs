@@ -1,7 +1,7 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE TypeOperators              #-}
 
 module API
 -- * API types
@@ -10,30 +10,30 @@ module API
 , AuthorAPI
 , BlogAPI
 , ProjectAPI
+, CrudAPI
+-- * Utility Types
+, Handler
+, MaybeOneOrMany
 -- * API function for server
 , api
 ) where
 
+import           Control.Monad.Trans.Either (EitherT)
 import           Data.Aeson
 import           Data.Proxy
+import           Database.Persist
 import           GHC.Generics
 import           Model
+import           Servant                    (ServantErr)
 import           Servant.API
 
-type BlogAPI = "blog"
-    :> Get '[JSON] [BlogPost]
-    :<|> Capture "blogPostId" BlogPostId :> Get '[JSON] BlogPost
-    :<|> ReqBody '[JSON] BlogPost :> Post '[JSON] BlogPost
+type CrudAPI entity =
+    QueryParam "b" (Key entity) :> Get  '[JSON] (MaybeOneOrMany entity)
+    :<|> ReqBody '[JSON] entity :> Post '[JSON] (Maybe entity)
 
-type ProjectAPI = "project"
-    :> Get '[JSON] [Project]
-    :<|> Capture "projectID" ProjectId :> Get '[JSON] Project
-    :<|> ReqBody '[JSON] Project :> Post '[JSON] Project
-
-type AuthorAPI = "author"
-    :> Get '[JSON] [Author]
-    :<|> Capture "authorId" AuthorId :> Get '[JSON] Author
-    :<|> ReqBody '[JSON] Author :> Post '[JSON] Author
+type BlogAPI    = "blog"    :> CrudAPI BlogPost
+type ProjectAPI = "project" :> CrudAPI Project
+type AuthorAPI  = "author"  :> CrudAPI Author
 
 type API' = "api" :>
     (    BlogAPI
@@ -42,6 +42,10 @@ type API' = "api" :>
     )
 
 type API = API' :<|> Raw
+
+type Handler = EitherT (ServantErr) (IO)
+
+type MaybeOneOrMany a = Either (Maybe a) [a]
 
 api :: Proxy API
 api = Proxy

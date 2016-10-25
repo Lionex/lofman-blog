@@ -9,7 +9,6 @@
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-
 module Model.DbTypes
 -- * content types
 ( BlogPost(..)
@@ -20,6 +19,7 @@ module Model.DbTypes
 , ProjectId
 -- * utility types
 , BlogAuthor(..)
+, migrateAll
 ) where
 
 import           Data.Time                   (UTCTime)
