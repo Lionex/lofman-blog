@@ -19,6 +19,7 @@ module Model.DbTypes
 , ProjectId
 -- * utility types
 , BlogAuthor(..)
+, migrateAll
 ) where
 
 import           Data.Time                   (UTCTime)
